@@ -5,6 +5,8 @@ import java.net.Socket;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+//Reminder, code must stopped with red square before starting the program again
+
 public class ServerThreadProj extends Thread {
 
 	private Socket socket;
@@ -80,7 +82,7 @@ public class ServerThreadProj extends Thread {
 				}
 
 				if (message.equalsIgnoreCase("2")) {
-					// Registers employee information
+
 					sendMessage("Employee ID: ");
 					logID = (String) in.readObject();
 
@@ -114,32 +116,13 @@ public class ServerThreadProj extends Thread {
 							if (message.equalsIgnoreCase("1")) {
 								// Registers employee information
 								//1.1
-								sendMessage("App Name: ");
-								bugAppname = (String) in.readObject();
-
-								sendMessage("Date Found: ");
-								bugDatefound = (String) in.readObject();
-
-								sendMessage("Platform: ");
-								bugPlatform = (String) in.readObject();
-
-								sendMessage("Bug Description: ");
-								bugProbdesc = (String) in.readObject();
-
-								sendMessage("Status: ");
-								bugStatus = (String) in.readObject();
-
-								sendMessage("Bug ID: ");
-								bugID = (String) in.readObject();
-								
-								// Adds bug information to a list
-								bug.addBug(bugAppname, bugDatefound, bugPlatform, bugProbdesc, bugStatus, bugID, bugEmpID);
-								bug.WriteToFile();
+								regBug();
 							}
 
 							else if (message.equalsIgnoreCase("2")) {
 								//sendMessage("Assign a bug");
-								
+								assignBug();
+									
 								
 								
 							} else if (message.equalsIgnoreCase("3")) {
@@ -148,29 +131,7 @@ public class ServerThreadProj extends Thread {
 									
 							} else if (message.equalsIgnoreCase("4")) {
 								//sendMessage("Update bug status");
-								
-								sendMessage("What is the ID of the bug you would like to assign a Employee to?\n"+"Bug ID: ");
-								searchID=(String) in.readObject();
-								
-								sendMessage("What is the current status of the bug?\n"+"Bug Status: ");
-								bugStatus = (String) in.readObject();
-								
-								int searchBugID = 0;
-								
-								LinkedList<Bugs> bugRecords = bug.getBugRecords();
-								for (int i = 0;i<bugRecords.size(); i++) {
-									Bugs bl = bugRecords.get(i);
-									
-									if(bl.getbugID().equals(searchID)) {
-										searchBugID = 1;
-										bl.setBugStatus(bugStatus);
-									}
-								}
-								if (searchBugID == 0) {
-									sendMessage("Unfortuantley the Bug ID you have entered does not exists, or you have entered it incorrectly\n"+"Please try again");
-								}
-								bug.WriteToFile();
-									
+								updateStatus();	
 								
 							} else if (message.equalsIgnoreCase("5")) {
 								sendMessage("You exited the system");
@@ -195,6 +156,78 @@ public class ServerThreadProj extends Thread {
 			e.printStackTrace();
 		}
 
+	}
+
+	private void updateStatus() throws IOException, ClassNotFoundException {
+		sendMessage("What is the ID of the bug you would like to update the status of?\n"+"Bug ID: ");
+		searchID=(String) in.readObject();
+		
+		sendMessage("What is the current status of the bug?\n"+"Bug Status: ");
+		bugStatus = (String) in.readObject();
+		
+		int searchBugID = 0;
+		
+		LinkedList<Bugs> bugRecords = bug.getBugRecords();
+		for (int i = 0;i<bugRecords.size(); i++) {
+			Bugs bl = bugRecords.get(i);
+			
+			if(bl.getbugID().equals(searchID)) {
+				searchBugID = 1;
+				bl.setBugStatus(bugStatus);
+			}
+		}
+		if (searchBugID == 0) {
+			sendMessage("Unfortuantley the Bug ID you have entered does not exists, or you have entered it incorrectly\n"+"Please try again");
+		}
+		bug.WriteToFile();
+	}
+
+	private void assignBug() throws IOException, ClassNotFoundException {
+		sendMessage("What is the ID of the bug you would like to assign a Employee to?\n"+"Bug ID: ");
+		searchID=(String) in.readObject();
+		
+		sendMessage("What is the ID of the employee you would like to assign to the bug?\n"+"Employee ID: ");
+		bugEmpID = (String) in.readObject();
+		
+		int searchBugID = 0;
+		
+		LinkedList<Bugs> bugRecords = bug.getBugRecords();
+		for (int i = 0;i<bugRecords.size(); i++) {
+			Bugs bl = bugRecords.get(i);
+			
+			if(bl.getbugID().equals(searchID)) {
+				searchBugID = 1;
+				bl.setBugEmpID(bugEmpID);
+			}
+		}
+		if (searchBugID == 0) {
+			sendMessage("Unfortuantley the Bug ID you have entered does not exists, or you have entered it incorrectly\n"+"Please try again");
+		}
+		bug.WriteToFile();
+	}
+
+	private void regBug() throws IOException, ClassNotFoundException {
+		sendMessage("App Name: ");
+		bugAppname = (String) in.readObject();
+
+		sendMessage("Date Found: ");
+		bugDatefound = (String) in.readObject();
+
+		sendMessage("Platform: ");
+		bugPlatform = (String) in.readObject();
+
+		sendMessage("Bug Description: ");
+		bugProbdesc = (String) in.readObject();
+
+		sendMessage("Status: ");
+		bugStatus = (String) in.readObject();
+
+		sendMessage("Bug ID: ");
+		bugID = (String) in.readObject();
+		
+		// Adds bug information to a list
+		bug.addBug(bugAppname, bugDatefound, bugPlatform, bugProbdesc, bugStatus, bugID, bugEmpID);
+		bug.WriteToFile();
 	}
 
 	
