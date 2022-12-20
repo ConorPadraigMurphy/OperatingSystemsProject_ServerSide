@@ -3,6 +3,9 @@ import java.io.FileWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
+//Reminder, code must stopped with red square before starting the program again
+//G00399177 - Conor Murphy
+
 
 public class BugDatabase {
 
@@ -55,25 +58,23 @@ public class BugDatabase {
 		Iterator<Bugs> iterate = bugRecords.iterator();
 		Bugs temp;
 		String result="";
+		
 		while(iterate.hasNext())
 		{
-			//if(.equalsIgnoreCase(null)) {
-				
+						
 				temp = iterate.next();
 				result = result 
 						+"\n-----Bug Details-----"
+						+"\nBug ID: "+temp.getbugID() 
 						+"\nBug Name: "+temp.getBugAppname()
 						+"\nDate:"+temp.getBugDatefound()
 						+"\nBug Platform: "+temp.getBugPlatform()
-						+"\nBug Description: "+temp.bugProbdesc
-						+"\nBug Status: "+temp.bugStatus
-						+"\nBug ID: "+temp.bugID 
-						+"\nAssigned Employee: "+temp.bugEmpID
+						+"\nBug Description: "+temp.getBugProbdesc()
+						+"\nBug Status: "+temp.getBugStatus()
+						+"\nAssigned Employee: "+temp.getBugEmpID()
 						+"\n";
-			//}
 		}
 			
-		
 		return result;
 	}
 	
